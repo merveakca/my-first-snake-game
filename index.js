@@ -9,19 +9,52 @@ let x = 20;
 let y = 20;
 let hareketX = 0;
 let hareketY = 0;
-let elmaX = 10;
-let elmaY = 10;
+
+let elmaX = 13;
+let elmaY = 5;
+
+let armutX = 19;
+let armutY = 11;
+
+let karpuzX = 3;
+let karpuzY = 7;
+
+let muzX = 8;
+let muzY = 15;
+
+let iskeletX = 16;
+let iskeletY = 3;
+
 let konum = 40;
+
 let boyutElma = 60;
+let boyutArmut = 60;
+let boyutKarpuz = 60;
+let boyutMuz = 60;
+let boyutIskelet = 60;
+
 let boyut = 60;
-let boyutBas=60;
+let boyutBas = 60;
 let yilanUzunlugu = 5;
 let yilanParcalari = [];
 let skor = 0;
 let hiz = 5;
 let can = 3;
 const elmaResmi = new Image();
-elmaResmi.src = './image/elma.png'
+elmaResmi.src = './image/elma.png';
+
+const armutResmi = new Image();
+armutResmi.src = './image/armut.png';
+
+const karpuzResmi = new Image();
+karpuzResmi.src = './image/karpuz.png';
+
+const muzResmi = new Image();
+muzResmi.src = './image/muz.png';
+
+const iskeletResmi = new Image();
+iskeletResmi.src = './image/iskelet.jpg';
+
 const yilanKuyrukSVG = `
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
 <!-- Yılanın kuyruğu -->
@@ -40,7 +73,7 @@ yilanBasSolResmi.src = './image/sol.png';
 yilanBasSagResmi.src = './image/sag.png';
 yilanBasAsagiResmi.src = './image/asagi.png';
 yilanBasYukariResmi.src = './image/yukari.png';
-yilanBasResmi=yilanBasSolResmi;
+yilanBasResmi = yilanBasSolResmi;
 
 class YilanParcasi {
     constructor(x, y) {
@@ -53,8 +86,17 @@ function oyunuCiz() {
     ekraniTemizle();
     yilaniCiz();
     elmayiCiz();
+    armutuCiz();
+    karpuzuCiz();
+    muzuCiz();
+    iskeletiCiz();
     yilanHareketiniGuncelle();
     elmaninKonumunuGuncelle();
+    armutunKonumunuGuncelle();
+    karpuzunKonumunuGuncelle();
+    muzunKonumunuGuncelle();
+    iskeletinKonumunuGuncelle();
+
     skoruCiz();
     hiziCiz();
     canCiz();
@@ -90,9 +132,23 @@ function yilaniCiz() {
 }
 
 function elmayiCiz() {
-    ctx.fillStyle = "red";
-    //ctx.fillRect(elmaX * konum, elmaY * konum,boyut,boyut);
     ctx.drawImage(elmaResmi, elmaX * konum, elmaY * konum, boyutElma, boyutElma);
+}
+
+function armutuCiz() {
+    ctx.drawImage(armutResmi, armutX * konum, armutY * konum, boyutArmut, boyutArmut);
+}
+
+function karpuzuCiz() {
+    ctx.drawImage(karpuzResmi, karpuzX * konum, karpuzY * konum, boyutKarpuz, boyutKarpuz);
+}
+
+function muzuCiz() {
+    ctx.drawImage(muzResmi, muzX * konum, muzY * konum, boyutMuz, boyutMuz);
+}
+
+function iskeletiCiz() {
+    ctx.drawImage(iskeletResmi, iskeletX * konum, iskeletY * konum, boyutIskelet, boyutIskelet);
 }
 
 function tusHareketleri(e) {
@@ -101,25 +157,25 @@ function tusHareketleri(e) {
             if (hareketX === 1) return;
             hareketX = -1;
             hareketY = 0;
-            yilanBasResmi=yilanBasSolResmi;
+            yilanBasResmi = yilanBasSolResmi;
             break;
         case 38: //yukarı
             if (hareketY === 1) return;
             hareketY = -1;
             hareketX = 0;
-            yilanBasResmi=yilanBasYukariResmi;
+            yilanBasResmi = yilanBasYukariResmi;
             break;
         case 39: //sağ
             if (hareketX === -1) return;
             hareketX = 1;
             hareketY = 0;
-            yilanBasResmi=yilanBasSagResmi;
+            yilanBasResmi = yilanBasSagResmi;
             break;
         case 40: //aşağı
             if (hareketY === -1) return;
             hareketY = 1;
             hareketX = 0;
-            yilanBasResmi=yilanBasAsagiResmi;
+            yilanBasResmi = yilanBasAsagiResmi;
             break;
     }
 
@@ -147,25 +203,149 @@ function yilanHareketiniGuncelle() {
 
 function elmaninKonumunuGuncelle() {
     if (x === elmaX && y === elmaY) {
-        elmaX = Math.floor(Math.random() * konum/2);
-        elmaY = Math.floor(Math.random() * konum/2);
+        elmaX = Math.floor(Math.random() * konum / 2);
+        elmaY = Math.floor(Math.random() * konum / 2);
 
         let elmaKonumuMüsaitMi = false;
         while (!elmaKonumuMüsaitMi) {
             elmaKonumuMüsaitMi = true;
             for (let parca of yilanParcalari) {
                 if (parca.x === elmaX && parca.y === elmaY) {
-                    elmaX = Math.floor(Math.random() * konum/2);
-                    elmaY = Math.floor(Math.random() * konum/2);
+                    elmaX = Math.floor(Math.random() * konum / 2);
+                    elmaY = Math.floor(Math.random() * konum / 2);
                     elmaKonumuMüsaitMi = false;
                 }
             }
+            if (elmaX === armutX && elmaY === armutY) return;
+            if (elmaX === karpuzX && elmaY === karpuzY) return;
+            if (elmaX === muzX && elmaY === muzY) return;
+            if (elmaX === iskeletX && elmaY === iskeletY) return;
         }
         yilanUzunlugu++;
         skor += 10;
 
         if (yilanUzunlugu % 3 === 0) {
-            hiz += 3;
+            hiz += 2;
+        }
+    }
+}
+
+function armutunKonumunuGuncelle() {
+    if (x === armutX && y === armutY) {
+        armutX = Math.floor(Math.random() * konum / 2);
+        armutY = Math.floor(Math.random() * konum / 2);
+
+        let armutKonumuMüsaitMi = false;
+        while (!armutKonumuMüsaitMi) {
+            armutKonumuMüsaitMi = true;
+            for (let parca of yilanParcalari) {
+                if (parca.x === armutX && parca.y === armutY) {
+                    armutX = Math.floor(Math.random() * konum / 2);
+                    armutY = Math.floor(Math.random() * konum / 2);
+                    armutKonumuMüsaitMi = false;
+                }
+            }
+            if (armutX === elmaX && armutY === elmaY) return;
+            if (armutX === karpuzX && armutY === karpuzY) return;
+            if (armutX === muzX && armutY === muzY) return;
+            if (armutX === iskeletX && armutY === iskeletY) return;
+        }
+        yilanUzunlugu++;
+        skor += 10;
+
+        if (yilanUzunlugu % 3 === 0) {
+            hiz += 2;
+        }
+    }
+}
+
+function karpuzunKonumunuGuncelle() {
+    if (x === karpuzX && y === karpuzY) {
+        karpuzX = Math.floor(Math.random() * konum / 2);
+        karpuzY = Math.floor(Math.random() * konum / 2);
+
+        let karpuzKonumuMüsaitMi = false;
+        while (!karpuzKonumuMüsaitMi) {
+            karpuzKonumuMüsaitMi = true;
+            for (let parca of yilanParcalari) {
+                if (parca.x === karpuzX && parca.y === karpuzX) {
+                    karpuzX = Math.floor(Math.random() * konum / 2);
+                    karpuzY = Math.floor(Math.random() * konum / 2);
+                    karpuzKonumuMüsaitMi = false;
+                }
+            }
+            if (karpuzX === elmaX && karpuzY === elmaY) return;
+            if (karpuzX === armutX && karpuzY === armutY) return;
+            if (karpuzX === muzX && karpuzY === muzY) return;
+            if (karpuzX === iskeletX && karpuzY === iskeletY) return;
+        }
+        yilanUzunlugu++;
+        skor += 10;
+
+        if (yilanUzunlugu % 3 === 0) {
+            hiz += 2;
+        }
+    }
+}
+
+function muzunKonumunuGuncelle() {
+    if (x === muzX && y === muzY) {
+        muzX = Math.floor(Math.random() * konum / 2);
+        muzY = Math.floor(Math.random() * konum / 2);
+
+        let muzKonumuMüsaitMi = false;
+        while (!muzKonumuMüsaitMi) {
+            muzKonumuMüsaitMi = true;
+            for (let parca of yilanParcalari) {
+                if (parca.x === muzX && parca.y === muzY) {
+                    muzX = Math.floor(Math.random() * konum / 2);
+                    muzY = Math.floor(Math.random() * konum / 2);
+                    muzKonumuMüsaitMi = false;
+                }
+            }
+            if (muzX === elmaX && muzY === elmaY) return;
+            if (muzX === armutX && muzY === armutY) return;
+            if (muzX === karpuzX && muzY === karpuzY) return;
+            if (muzX === iskeletX && muzY === iskeletY) return;
+        }
+        yilanUzunlugu++;
+        skor += 10;
+
+        if (yilanUzunlugu % 3 === 0) {
+            hiz += 2;
+        }
+    }
+}
+
+let iskeletiYemeSayaci=0;
+function iskeletinKonumunuGuncelle() {
+    if (x === iskeletX && y === iskeletY) {
+        iskeletX = Math.floor(Math.random() * konum / 2);
+        iskeletY = Math.floor(Math.random() * konum / 2);
+
+        let iskeletKonumuMüsaitMi = false;
+        while (!iskeletKonumuMüsaitMi) {
+            iskeletKonumuMüsaitMi = true;
+            for (let parca of yilanParcalari) {
+                if (parca.x === iskeletX && parca.y === iskeletY) {
+                    iskeletX = Math.floor(Math.random() * konum / 2);
+                    iskeletY = Math.floor(Math.random() * konum / 2);
+                    iskeletKonumuMüsaitMi = false;
+                }
+            }
+            if (iskeletX === elmaX && iskeletY === elmaY) return;
+            if (iskeletX === armutX && iskeletY === armutY) return;
+            if (iskeletX === karpuzX && iskeletY === karpuzY) return;
+            if (iskeletX === muzX && iskeletY === muzY) return;
+        }
+        yilanParcalari.shift();
+        yilanUzunlugu -= 2;
+        skor -= 20;
+
+        iskeletiYemeSayaci++;
+
+        if (yilanUzunlugu % 3 === 0) {
+            hiz += 2;
         }
     }
 }
@@ -192,10 +372,9 @@ function oyunBittiMi() {
         if (parca.x === x && parca.y === y) {
             can--;
             if (can === 0) {
-                oyunBitti = true
+                oyunBitti = true;
                 break;
             }
-
             yilanParcalari.splice(0, index);
             yilanUzunlugu = yilanParcalari.length;
             // Reset the score based on the new length
@@ -205,6 +384,13 @@ function oyunBittiMi() {
             break;
         }
     }
+    if (iskeletiYemeSayaci === 2) {
+        // İskeleti 3 kez yediyse canı azalt
+        can--;
+        iskeletiYemeSayaci = 0; // Sayacı sıfırla
+        if(can===0) oyunBitti=true;
+    }
+    
 
     if (oyunBitti) {
         ctx.fillStyle = "white";
